@@ -17,6 +17,8 @@ layout: intro-image
 image: https://rulesets.info/static/img/home-cover-night.png
 ---
 
+<!-- TODO: Test order -->
+
 <div class="absolute top-10">
   <span class="font-700">
     Author and Date
@@ -201,8 +203,68 @@ void testMultipleAssertions() {
 ```
 If one of the assertions fails, the test will fail and list of all failed assertions will be shown like this :
 
-```
+```java
 => org.opentest4j.MultipleFailuresError: address name (2 failures)
   1) expected: <Pingu> but was: <null>
   2) expected: <NootNoot> but was: <null>
+```
+
+---
+
+# Test timeout
+
+- Use `org.junit.jupiter.api.Assertions.assertTimeout()` method to set the timeout for the test.
+- `assertTimeout()` will run the test until finish to count the time take by the test.
+
+```java {1-13|8-12}
+import static org.junit.jupiter.api.Assertions.assertTimeout;
+
+import com.helloyeew.penguin;
+
+@Test
+void testTimeout() {
+    Penguin penguin = new Penguin("Pingu", "NootNoot");
+    // The test will run until finish
+    Boolean stillSleeping = assertTimeout(Duration.ofMillis(100), () -> {
+        penguin.sleep(20000);
+        return penguin.isSleeping();
+    });
+    assertTrue(stillSleeping);
+```
+
+If failed, JUnit will list the time that the test took and the time that's exceeded the timeout and throw `org.opentest4j.AssertionFailedError`.
+
+```java
+=> org.opentest4j.AssertionFailedError: execution exceeded timeout of 100 ms by 19900 ms
+```
+
+But if we don't want to wait until penguin wake up?
+
+---
+
+# Force quit test on timeout
+
+- Use `org.junit.jupiter.api.Assertions.assertTimeoutPreemptively()` to set the timeout.
+- `assertTimeoutPreemptively()` will force quit the test if it exceeds the timeout.
+
+```java {1-13|8-12}
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
+
+import com.helloyeew.penguin;
+
+@Test
+void testTimeoutPreemptively() {
+    Penguin penguin = new Penguin("Pingu", "NootNoot");
+    // The test will run for only 100 ms
+    Boolean stillSleeping = assertTimeoutPreemptively(Duration.ofMillis(100), () -> {
+        penguin.sleep(20000);
+        return penguin.isSleeping();
+    });
+    assertTrue(stillSleeping);
+```
+
+If failed, JUnit will throw `org.opentest4j.AssertionFailedError` immediately after exceed the timeout.
+
+```java
+=> org.opentest4j.AssertionFailedError: execution timed out after 100 ms
 ```
