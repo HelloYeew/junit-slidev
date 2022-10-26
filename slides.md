@@ -2,11 +2,7 @@
 theme: apple-basic
 highlighter: shiki
 lineNumbers: true
-info: |
-  ## Slidev Starter Template
-  Presentation slides for developers.
-
-  Learn more at [Sli.dev](https://sli.dev)
+info: JUnit 5 - A unit testing framework for Java
 drawings:
   persist: false
 css: unocss
@@ -48,6 +44,7 @@ More info : https://www.vogella.com/tutorials/JUnit/article.html
 
 ## A big update from JUnit 4
 
+- At first JUnit had only one modules, but now JUnit 5 has 3 modules
 - JUnit 5 is composed of 3 modules:
   - JUnit Platform - a platform for launching testing frameworks on the JVM
   - JUnit Jupiter - a set of extensions to the JUnit Platform
@@ -111,11 +108,10 @@ class CalculatorTest {
         calculator = new Calculator();
     }
 
-    @Test                                               
+    @Test                                              
     @DisplayName("Simple multiplication should work")   
     void testMultiply() {
-        assertEquals(20, calculator.multiply(4, 5),     
-                "Regular multiplication should work");  
+        assertEquals(20, calculator.multiply(4, 5), "Regular multiplication should work");  
     }
 
     @RepeatedTest(5) // This test will be repeated 5 times                       
@@ -218,7 +214,6 @@ If one of the assertions fails, the test will fail and list of all failed assert
 
 ```java {1-13|8-12}
 import static org.junit.jupiter.api.Assertions.assertTimeout;
-
 import com.helloyeew.penguin;
 
 @Test
@@ -268,3 +263,250 @@ If failed, JUnit will throw `org.opentest4j.AssertionFailedError` immediately af
 ```java
 => org.opentest4j.AssertionFailedError: execution timed out after 100 ms
 ```
+
+---
+
+# Repeat test
+
+- Use `org.junit.jupiter.api.RepeatedTest` annotation to repeat the test.
+
+```java
+import org.junit.jupiter.api.RepeatedTest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@RepeatedTest(10)
+void testRepeated() {
+    assertEquals(2, calculator.add(1, 1));
+}
+```
+
+---
+
+# Disable test
+
+- Use `@Disabled` annotation to disable the test.
+
+```java
+import org.junit.jupiter.api.Disabled;
+
+@Disabled("Disabled until I wake up")
+@Test
+void testDisabled() {
+    // Some test here!
+}
+```
+
+---
+layout: intro-image
+image: 'https://rulesets.info/static/img/status-cover-night.jpg'
+---
+
+<div class="section-header">
+  <h1>Dynamic & parametized tests</h1>
+  <p>Make a unit test with JUnit</p>
+</div>
+
+<style>
+  .section-header {
+    position: absolute;
+    /* Align to left center */
+    left: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+</style>
+
+---
+
+# Dynamic tests
+
+- Dynamic test method are annotated with `@TestFactory` annotation and allow you to create multiple tests of type `DynamicTest` with your code.
+- This can return `Iterable` or `Stream` of `DynamicTest` objects.
+- JUnit 5 creates and runs all dynamic tests during test execution.
+- Note : `@BeforeAll` and `@AfterAll` will not work with dynamic tests.
+
+```java
+class DynamicTestCreationTest {
+
+    @TestFactory
+    Stream<DynamicTest> testDifferentMultiplyOperations() {
+        MyClass tester = new MyClass();
+        int[][] data = new int[][] { { 1, 2, 2 }, { 5, 3, 15 }, { 121, 4, 484 } };
+        return Arrays.stream(data).map(entry -> {
+            int m1 = entry[0];
+            int m2 = entry[1];
+            int expected = entry[2];
+            return dynamicTest(m1 + " * " + m2 + " = " + expected, () -> {
+                assertEquals(expected, tester.multiply(m1, m2));
+            });
+        });
+    }
+
+    // class to be tested
+    class MyClass {
+        public int multiply(int i, int j) {
+            return i * j;
+        }
+    }
+}
+```
+
+---
+
+# Parametized tests
+
+- JUnit use `junit-jupiter-params` library to create parametized tests. (You need to add this library to your project)
+- Parametized test method are annotated with `@ParameterizedTest` annotation and allow you to create multiple tests with your code.
+- Use `@<something>Source` annotation to provide the data for the test.
+
+---
+
+# Data sources example
+
+| Annotation | Description |
+| --- | --- |
+| `@ValueSource(ints = { 1, 2, 3 })` | Define an array of test values. Permissible types are String, int, long, or double. |
+| `@EnumSource(value=MyEnum.class, names = { "ONE", "TWO" })` | Pass Enum constants as test class. With the optional attribute names you can choose which constants should be used. Otherwise all attributes are used. |
+| `@MethodSource(names = "genTestData")` | The result of the named method is passed as argument to the test. |
+| `@CsvSource({ "1, 2, 3", "4, 5, 9" })` | Expects strings to be parsed as Csv. The delimiter is ','. |
+| `@ArgumentsSource(MyArgumentsProvider.class)` | Specifies a class that provides the test data. The referenced class has to implement the ArgumentsProvider interface. |
+
+---
+
+# Example
+
+```java
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+public class UsingParameterizedTest {
+
+    public static int[][] data() {
+        return new int[][] { { 1 , 2, 2 }, { 5, 3, 15 }, { 121, 4, 484 } };
+    }
+
+    @ParameterizedTest
+    @MethodSource(value =  "data")
+    void testWithStringParameter(int[] data) {
+        MyClass tester = new MyClass();
+        int m1 = data[0];
+        int m2 = data[1];
+        int expected = data[2];
+        assertEquals(expected, tester.multiply(m1, m2));
+    }
+
+    // class to be tested
+    class MyClass {
+        public int multiply(int i, int j) {
+            return i * j;
+        }
+    }
+}
+```
+
+---
+layout: intro-image
+image: 'https://www.helloyeew.dev/assets/555559.jpg'
+---
+
+<div class="section-header">
+  <h1>More info</h1>
+  <p>Make a unit test with JUnit</p>
+</div>
+
+<style>
+  .section-header {
+    position: absolute;
+    /* Align to left center */
+    left: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+</style>
+
+---
+
+# Nested test
+
+- The `@Nested` annotation can be used to annotate inner classes which also contain tests.
+- This allow to group test and have additional `@BeforeEach` and `@AfterEach` methods.
+- Additional rules
+  - All nested test classes must be non-static inner classes.
+  - The nested test classes are annotated with `@Nested` annotation so that the runtime can recognize the nested test classes.
+  - A nested test class can contain `Test` methods, one `@BeforeEach` method, and one `@AfterEach` method.
+
+---
+
+# Test order
+
+- JUnit test order is a deterministic but unpredictable order. -> Use `@TestMethodOrder` annotation to change the order.
+  - `@TestMethodOrder(MethodOrderer.OrderAnnotation.class)` - Allows to use the @Order(int) annotation on methods to define order
+  - `@TestMethodOrder(MethodOrderer.DisplayName.class)` - runs test method in alphanumeric order of display name
+  - `@TestMethodOrder(MethodOrderer.MethodName.class)` - runs test method in alphanumeric order of method name
+  - Custom implementation - Implement your own `MethodOrderer` via the `orderMethods` method, which allows you to call `context.getMethodDescriptors().sort(..)`
+
+---
+
+# Test order example
+
+```java {1-21|9-13|15-19}
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+
+@TestMethodOrder(OrderAnnotation.class)
+class OrderAnnotationDemoTest {
+
+    @Test
+    @Order(1)
+    void firstOne() {
+        // test something here
+    }
+
+    @Test
+    @Order(2)
+    void secondOne() {
+        // test something here
+    }
+
+}
+```
+
+---
+
+# Test suites
+
+- Test suites are a way to group tests together and set up some common configuration for them.
+
+```java{1-10|5-7}
+import org.junit.platform.suite.api.SelectPackages;
+import org.junit.platform.suite.api.Suite;
+import org.junit.platform.suite.api.SuiteDisplayName;
+
+@Suite
+@SuiteDisplayName("JUnit Platform Suite Demo")
+@SelectPackages("penguin")
+public class SuiteDemo {
+
+}
+```
+
+---
+layout: intro-image
+---
+
+<div class="section-header">
+  <h1>Let's see some real 'game' tests!</h1>
+</div>
+
+<style>
+  .section-header {
+    position: absolute;
+    /* Align to left center */
+    left: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+</style>
