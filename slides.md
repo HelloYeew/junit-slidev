@@ -57,7 +57,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import example.util.Calculator;
+import com.helloyeew.Calculator;
 
 class MyFirstJUnitJupiterTests {
 
@@ -95,7 +95,7 @@ image: 'https://rulesets.info/static/img/changelog-cover-night2.png'
 
 One class contains one or more tests
 
-```java {1-23|5-8|10-15|17-22}
+```java {1-23|5-8|10-15|16-22}
 class CalculatorTest {
 
     Calculator calculator;
@@ -349,10 +349,10 @@ class DynamicTestCreationTest {
 
 ---
 
-# parameterized tests
+# Parameterized tests
 
 - JUnit use `junit-jupiter-params` library to create parameterized tests. (You need to add this library to your project)
-- parameterized test method are annotated with `@ParameterizedTest` annotation and allow you to create multiple tests with your code.
+- Parameterized test method are annotated with `@ParameterizedTest` annotation and allow you to create multiple tests with your code.
 - Use `@<something>Source` annotation to provide the data for the test.
 
 ---
@@ -365,6 +365,13 @@ class DynamicTestCreationTest {
 | `@EnumSource(value=MyEnum.class, names = { "ONE", "TWO" })` | Pass Enum constants as test class. With the optional attribute names you can choose which constants should be used. Otherwise all attributes are used. |
 | `@MethodSource(names = "genTestData")` | The result of the named method is passed as argument to the test. |
 | `@CsvSource({ "1, 2, 3", "4, 5, 9" })` | Expects strings to be parsed as Csv. The delimiter is ','. |
+
+---
+
+# Data sources example
+
+| Annotation | Description |
+| --- | --- |
 | `@ArgumentsSource(MyArgumentsProvider.class)` | Specifies a class that provides the test data. The referenced class has to implement the ArgumentsProvider interface. |
 
 ---
