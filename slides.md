@@ -17,7 +17,7 @@ image: https://rulesets.info/static/img/home-cover-night.png
 
 <div class="absolute top-10">
   <span class="font-700">
-    Author and Date
+    HelloYeew
   </span>
 </div>
 
@@ -79,7 +79,6 @@ image: 'https://rulesets.info/static/img/changelog-cover-night2.png'
 
 <div class="section-header">
   <h1>Basic Usage</h1>
-  <p>Make a unit test with JUnit</p>
 </div>
 
 <style>
@@ -303,7 +302,6 @@ image: 'https://rulesets.info/static/img/status-cover-night.jpg'
 
 <div class="section-header">
   <h1>Dynamic & parametized tests</h1>
-  <p>Make a unit test with JUnit</p>
 </div>
 
 <style>
@@ -412,7 +410,6 @@ image: 'https://www.helloyeew.dev/assets/555559.jpg'
 
 <div class="section-header">
   <h1>More info</h1>
-  <p>Make a unit test with JUnit</p>
 </div>
 
 <style>
