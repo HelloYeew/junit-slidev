@@ -1,7 +1,7 @@
 ---
 theme: apple-basic
 highlighter: shiki
-lineNumbers: true
+lineNumbers: false
 info: JUnit 5 - A unit testing framework for Java
 drawings:
   persist: false
@@ -12,8 +12,6 @@ fonts:
 layout: intro-image
 image: https://rulesets.info/static/img/home-cover-night.png
 ---
-
-<!-- TODO: Test order -->
 
 <div class="absolute top-10">
   <span class="font-700">
@@ -44,7 +42,7 @@ More info : https://www.vogella.com/tutorials/JUnit/article.html
 
 ## A big update from JUnit 4
 
-- At first JUnit had only one modules, but now JUnit 5 has 3 modules
+- At first JUnit had only one module, but now JUnit 5 has 3 modules
 - JUnit 5 is composed of 3 modules:
   - JUnit Platform - a platform for launching testing frameworks on the JVM
   - JUnit Jupiter - a set of extensions to the JUnit Platform
@@ -301,7 +299,7 @@ image: 'https://rulesets.info/static/img/status-cover-night.jpg'
 ---
 
 <div class="section-header">
-  <h1>Dynamic & parametized tests</h1>
+  <h1>Dynamic & parameterized tests</h1>
 </div>
 
 <style>
@@ -351,10 +349,10 @@ class DynamicTestCreationTest {
 
 ---
 
-# Parametized tests
+# parameterized tests
 
-- JUnit use `junit-jupiter-params` library to create parametized tests. (You need to add this library to your project)
-- Parametized test method are annotated with `@ParameterizedTest` annotation and allow you to create multiple tests with your code.
+- JUnit use `junit-jupiter-params` library to create parameterized tests. (You need to add this library to your project)
+- parameterized test method are annotated with `@ParameterizedTest` annotation and allow you to create multiple tests with your code.
 - Use `@<something>Source` annotation to provide the data for the test.
 
 ---
